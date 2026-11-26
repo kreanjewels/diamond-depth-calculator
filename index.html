@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diamond Depth percentage</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f4f2ed;color:#242825;font:1rem system-ui,sans-serif;padding:clamp(1rem,6vw,5rem)}main{max-width:36rem;margin:auto;background:white;border:1px solid #ddd8cd;border-radius:1rem;padding:clamp(1rem,6vw,2.5rem)}h1{font:2.2rem Georgia,serif;margin:0}p{line-height:1.6}label{display:block;margin-top:1rem;font-weight:600}input,textarea{display:block;width:100%;margin:.35rem 0;padding:.7rem;border:1px solid #737970;border-radius:.4rem;font:inherit}button{margin-top:1rem;padding:.7rem 1rem;border:0;border-radius:.4rem;background:#24463a;color:white;font:inherit;cursor:pointer}output{display:block;padding:1rem;background:#edf3ef;border-radius:.4rem;margin-top:1rem;font-weight:700;overflow-wrap:anywhere}
+</style>
+<main>
+<h1>Depth percentage</h1><p>Enter depth and the reference width or diameter in the same unit.</p>
+<form>
+<label>Depth (mm)<input name="first" type="number" step="any" required value="4"></label><label>Reference width (mm)<input name="second" type="number" step="any" required value="6"></label>
+<button>Calculate</button><output aria-live="polite">Enter values and select Calculate.</output>
+</form>
+</main>
+<script>
+const form = document.querySelector("form");
+const result = form.querySelector("output");
+form.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const data = new FormData(form);
+  const entries = [data.get("first"), data.get("second")];
+  const values = entries.map(Number);
+  if (entries.some(entry => !/^(?:\d+(?:\.\d*)?|\.\d+)(?:e[+-]?\d+)?$/i.test(entry)) || values.some(value => !Number.isFinite(value) || value <= 0)) {
+    result.textContent = "Enter positive numbers only.";
+    return;
+  }
+  const answer = values[0] / values[1] * 100;
+  result.textContent = Number.isFinite(answer)
+    ? answer.toLocaleString("en", { maximumFractionDigits: 2, minimumFractionDigits: 0 }) + " %"
+    : "The result exceeds the supported range.";
+});
+</script>
+</html>
